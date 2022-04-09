@@ -1,8 +1,8 @@
 package main
 
 import (
+	"httptest-templates/handler"
 	"net/http"
-	"test-handlers/handler"
 )
 
 func main() {

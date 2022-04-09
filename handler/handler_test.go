@@ -6,26 +6,31 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	_ "httptest-templates/utils"
 )
 
 func TestIndex(t *testing.T) {
 	var tests = []struct {
-		rMethod  string
-		usrAgent []string
-		tName    string
-		want     string
+		rMethod   string
+		rUsrAgent []string
+		rTarget   string
+		tName     string
+		want      string
 	}{
 		{
-			rMethod:  "GET",
-			usrAgent: []string{"user-agent", "curl"},
-			tName:    "test txt file",
-			want:     "# Hallo\nthis is a simple txt file\n",
+			rMethod:   "GET",
+			rUsrAgent: []string{"user-agent", "curl"},
+			rTarget:   "/",
+			tName:     "test txt file",
+			want:      "# Hallo\nthis is a simple txt file\n",
 		},
 		{
-			rMethod:  "GET",
-			usrAgent: []string{"user-agent", "mozilla"},
-			tName:    "test html file",
-			want:     "\n<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>42</title>\n</head>\n<body>\n\n<h1>Hello</h1>\n<p>This is a simple HTML template</p>\n\n</body>\n</html>\n\n",
+			rMethod:   "GET",
+			rUsrAgent: []string{"user-agent", "mozilla"},
+			rTarget:   "/",
+			tName:     "test html file",
+			want:      "\n<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>42</title>\n</head>\n<body>\n\n<h1>Hello</h1>\n<p>This is a simple HTML template</p>\n\n</body>\n</html>\n\n\n",
 		},
 	}
 
@@ -33,12 +38,12 @@ func TestIndex(t *testing.T) {
 	for _, tt := range tests {
 		req := httptest.NewRequest(
 			tt.rMethod,
-			"/",
+			tt.rTarget,
 			bytes.NewBuffer(nil),
 		)
 		req.Header.Set(
-			tt.usrAgent[0],
-			tt.usrAgent[1],
+			tt.rUsrAgent[0],
+			tt.rUsrAgent[1],
 		)
 
 		rr := httptest.NewRecorder()
